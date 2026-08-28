@@ -254,51 +254,53 @@
 <body>
 
     <script>
-    document.getElementById('form-agendamento').addEventListener('submit', function(event) {
-        // 1. Evita que a página recarregue ao clicar no botão
-        event.preventDefault(); 
+   document.getElementById('form-agendamento').addEventListener('submit', function(event) {
+    event.preventDefault(); 
 
-        // 2. Pega os valores que o cliente digitou
-        const clientName = document.getElementById('clientName').value;
-        const clientPhone = document.getElementById('clientPhone').value;
-        const serviceId = document.getElementById('serviceId').value;
-        const date = document.getElementById('date').value;
-        const time = document.getElementById('time').value;
+    const clientName = document.getElementById('clientName').value;
+    const clientPhone = document.getElementById('clientPhone').value;
+    const serviceId = document.getElementById('serviceId').value;
+    let date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
 
-        // 3. Junta a data e a hora no padrão que o Java (LocalDateTime) entende: YYYY-MM-DDTHH:mm:00
-        const dateTime = `${date}T${time}:00`;
+    if (date.includes('/')) {
+        const partes = date.split('/');
+        if (partes.length === 3) {
+            date = `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
+    }
 
-        // 4. Monta o pacote de dados (JSON) para enviar ao backend
-        const appointmentData = {
-            clientName: clientName,
-            clientPhone: clientPhone,
-            service: {
-                id: parseInt(serviceId) // O Spring Boot entende que isso é a relação com a entidade Service
-            },
-            dateTime: dateTime
-        };
+    const dateTime = `${date}T${time}:00`;
 
-        // 5. Faz a requisição para a API local na porta 8080
-        fetch('http://localhost:8080/appointments', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(appointmentData)
-        })
-        .then(response => {
-            if (response.ok) {
-                alert("Horário agendado com sucesso, " + clientName + "!");
-                document.getElementById('form-agendamento').reset(); // Limpa o formulário
-            } else {
-                return response.text().then(text => { throw new Error(text) });
-            }
-        })
-        .catch(error => {
-            alert("Não foi possível agendar. Verifique se o horário está disponível.");
-            console.error('Erro na API:', error);
-        });
+    const appointmentData = {
+        clientName: clientName,
+        clientPhone: clientPhone,
+        service: {
+            id: parseInt(serviceId) 
+        },
+        dateTime: dateTime
+    };
+
+    fetch('http://localhost:8080/appointments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(appointmentData)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Horário agendado com sucesso, " + clientName + "!");
+            document.getElementById('form-agendamento').reset(); 
+        } else {
+            return response.text().then(text => { throw new Error(text) });
+        }
+    })
+    .catch(error => {
+        alert("Não foi possível agendar. Verifique se o horário está disponível.");
+        console.error('Erro na API:', error);
     });
+});
 </script>
 </body>
 </html>
