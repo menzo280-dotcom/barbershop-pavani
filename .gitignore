@@ -1,0 +1,16 @@
+# Maven e Java
+target/
+*.class
+
+# IDEs
+.idea/
+.vscode/
+
+# Variáveis de ambiente e segredos
+.env
+.env.*
+!.env.example
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

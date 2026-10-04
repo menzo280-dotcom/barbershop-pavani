@@ -1,3 +1,4 @@
+
 package com.barber.pavani.controller;
 
 import com.barber.pavani.entity.Appointment;
@@ -22,14 +23,50 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
-        Appointment savedAppointment = appointmentService.save(appointment);
-        return ResponseEntity.ok(savedAppointment);
-    }
-    @PutMapping("/{id}/status")
-    public ResponseEntity<Appointment> updateStatus(@PathVariable Long id, @RequestBody Appointment appointmentDetails) {
-        Appointment updatedAppointment = appointmentService.updateStatus(id, appointmentDetails.getStatus());
-        return ResponseEntity.ok(updatedAppointment);
+    public ResponseEntity<Appointment> createAppointment(
+            @RequestBody Appointment appointment) {
+        return ResponseEntity.ok(
+                appointmentService.save(appointment)
+        );
     }
 
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<Appointment> cancelAppointment(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(
+                appointmentService.cancel(id)
+        );
+    }
+
+    @PutMapping("/{id}/reschedule")
+    public ResponseEntity<Appointment> rescheduleAppointment(
+            @PathVariable Long id,
+            @RequestBody Appointment appointmentDetails) {
+
+        Long serviceId = null;
+
+        if (appointmentDetails.getService() != null) {
+            serviceId = appointmentDetails.getService().getId();
+        }
+
+        return ResponseEntity.ok(
+                appointmentService.reschedule(
+                        id,
+                        appointmentDetails.getDateTime(),
+                        serviceId
+                )
+        );
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Appointment> updateStatus(
+            @PathVariable Long id,
+            @RequestBody Appointment appointmentDetails) {
+        return ResponseEntity.ok(
+                appointmentService.updateStatus(
+                        id,
+                        appointmentDetails.getStatus()
+                )
+        );
+    }
 }

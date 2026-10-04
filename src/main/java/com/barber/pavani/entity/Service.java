@@ -1,3 +1,4 @@
+
 package com.barber.pavani.entity;
 
 import jakarta.persistence.*;
@@ -14,14 +15,17 @@ public class Service {
 
     private Double price;
 
+    private Integer durationMinutes;
 
     public Service() {
     }
 
-    public Service(Long id, String name, Double price) {
+    public Service(Long id, String name, Double price,
+                   Integer durationMinutes) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.durationMinutes = durationMinutes;
     }
 
     public Long getId() {
@@ -48,4 +52,11 @@ public class Service {
         this.price = price;
     }
 
+    public Integer getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(Integer durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
 }
