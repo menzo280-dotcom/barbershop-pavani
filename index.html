@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pavani Cortes</title>
-    <link rel="stylesheet" href="style.css">
 
+    <title>Pavani Cortes</title>
+    
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
@@ -31,9 +32,8 @@
       <a href="#servicos">Serviços</a>
       <a href="#galeria">Galeria</a>
       <a href="#sobre">Sobre</a>
-      <a href="#galeria">Galeria</a>
       <a href="#agendamento">Agendamento</a>
-      <a href="#localizacao">Localização</a>
+      <a href="#contato">Localização</a>
     </nav>
 
     <a href="#agendamento" class="btn-header">Agendar horário</a>
@@ -157,11 +157,8 @@
     <input type="tel" id="clientPhone" placeholder="Seu telefone" required>
 
     <select id="serviceId" required>
-        <option value="" disabled selected>Escolha um serviço</option>
-        <option value="1">Corte</option>
-        <option value="2">Barba</option>
-        <option value="3">Corte + Barba</option>
-    </select>
+    <option value="" disabled selected>Escolha um serviço</option>
+</select>
 
     <input type="date" id="date" required>
     <input type="time" id="time" required>
@@ -243,91 +240,136 @@
     </a>
 
 </div>
-</footer><!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pavani Cortes</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+</footer>
 
-    <script>
-   document.getElementById('form-agendamento').addEventListener('submit', function(event) {
-    event.preventDefault(); 
+<script>
 
-    const clientName = document.getElementById('clientName').value;
-    const clientPhone = document.getElementById('clientPhone').value;
-    const serviceId = document.getElementById('serviceId').value;
-    let date = document.getElementById('date').value;
-    const time = document.getElementById('time').value;
+fetch('http://localhost:8080/api/services')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao buscar serviços');
+            }
 
-    if (date.includes('/')) {
-        const partes = date.split('/');
-        if (partes.length === 3) {
-            date = `${partes[2]}-${partes[1]}-${partes[0]}`;
+            return response.json();
+        })
+        .then(services => {
+
+            const serviceSelect = document.getElementById('serviceId');
+
+            services.forEach(service => {
+
+                const option = document.createElement('option');
+
+                option.value = service.id;
+                option.textContent =
+                    `${service.name} - R$ ${Number(service.price).toFixed(2).replace('.', ',')}`;
+
+                serviceSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar serviços:', error);
+        });
+
+
+    // Formulário de agendamento
+    document.getElementById('form-agendamento').addEventListener('submit', function(event) {
+
+        event.preventDefault();
+
+        const clientName =
+            document.getElementById('clientName').value;
+
+        const clientPhone =
+            document.getElementById('clientPhone').value;
+
+        const serviceId =
+            document.getElementById('serviceId').value;
+
+        let date =
+            document.getElementById('date').value;
+
+        const time =
+            document.getElementById('time').value;
+
+
+        if (date.includes('/')) {
+
+            const partes = date.split('/');
+
+            if (partes.length === 3) {
+                date =
+                    `${partes[2]}-${partes[1]}-${partes[0]}`;
+            }
         }
-    }
 
-    const dateTime = `${date}T${time}:00`;
 
-    const appointmentData = {
-        clientName: clientName,
-        clientPhone: clientPhone,
-        service: {
-            id: parseInt(serviceId) 
-        },
-        dateTime: dateTime
-    };
+        const dateTime =
+            `${date}T${time}:00`;
 
-    fetch('http://localhost:8080/appointments', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(appointmentData)
-    })
-    .then(response => {
-        if (response.ok) {
-            alert("Horário agendado com sucesso, " + clientName + "!");
-            document.getElementById('form-agendamento').reset(); 
-        } else {
-            return response.text().then(text => { throw new Error(text) });
-        }
-    })
-    .catch(error => {
-        alert("Não foi possível agendar. Verifique se o horário está disponível.");
-        console.error('Erro na API:', error);
+
+        const appointmentData = {
+
+            clientName: clientName,
+
+            clientPhone: clientPhone,
+
+            service: {
+                id: parseInt(serviceId)
+            },
+
+            dateTime: dateTime
+        };
+
+
+        fetch('http://localhost:8080/api/appointments', {
+
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify(appointmentData)
+        })
+
+        .then(response => {
+
+            if (response.ok) {
+
+                alert(
+                    "Horário agendado com sucesso, "
+                    + clientName
+                    + "!"
+                );
+
+                document
+                    .getElementById('form-agendamento')
+                    .reset();
+
+            } else {
+
+                return response.text().then(text => {
+                    throw new Error(text);
+                });
+            }
+        })
+
+        .catch(error => {
+
+            alert(
+                "Não foi possível agendar. "
+                + "Verifique se o horário está disponível."
+            );
+
+            console.error(
+                'Erro na API:',
+                error
+            );
+        });
     });
-});
+
 </script>
+
 </body>
 </html>
-
-<header class="header">
-  <div class="header-container">
-
-    <a href="#" class="logo">
-    <span class="logo-part">PAV</span>
-
-    <span class="logo-scissor">✂</span>
-
-    <span class="logo-part">NI</span>
-
-    <span class="logo-space"></span>
-
-    <span class="logo-part">CORTES</span>
-</a>
-
-    <nav class="nav-menu">
-      <a href="#inicio">Início</a>
-      <a href="#servicos">Serviços</a>
-      <a href="#galeria">Galeria</a>
-      <a href="#sobre">Sobre</a>
-      <a href="#contato">Contato</a>
-    </nav>
-
-    <a href="#agendamento" class="btn-header">Agendar horário</a>
-  </div>
-</header>

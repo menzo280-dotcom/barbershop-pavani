@@ -14,8 +14,11 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ServiceController {
 
-    @Autowired
-    private ServiceService serviceService;
+    private final ServiceService serviceService;
+
+    public ServiceController(ServiceService serviceService) {
+        this.serviceService = serviceService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Service>> getAllServices() {

@@ -4,7 +4,9 @@ package com.barber.pavani.service;
 import com.barber.pavani.entity.Service;
 import com.barber.pavani.repository.ServiceRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
+
 
 @org.springframework.stereotype.Service
 public class ServiceService {
@@ -33,7 +35,7 @@ public class ServiceService {
 
         validateService(serviceDetails);
 
-        service.setName(serviceDetails.getName());
+         service.setName(serviceDetails.getName());
         service.setPrice(serviceDetails.getPrice());
         service.setDurationMinutes(
                 serviceDetails.getDurationMinutes()
@@ -51,7 +53,8 @@ public class ServiceService {
         }
 
         if (service.getPrice() == null
-                || service.getPrice() <= 0) {
+                || service.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+
             throw new IllegalArgumentException(
                     "O preço deve ser maior que zero"
             );

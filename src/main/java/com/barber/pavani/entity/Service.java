@@ -2,6 +2,7 @@
 package com.barber.pavani.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "services")
@@ -13,15 +14,19 @@ public class Service {
 
     private String name;
 
-    private Double price;
+    private BigDecimal price;
 
     private Integer durationMinutes;
 
     public Service() {
     }
 
-    public Service(Long id, String name, Double price,
-                   Integer durationMinutes) {
+    public Service(
+            Long id,
+            String name,
+            BigDecimal price,
+            Integer durationMinutes
+    ) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -44,11 +49,11 @@ public class Service {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
