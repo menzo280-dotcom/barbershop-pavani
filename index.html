@@ -119,24 +119,25 @@
 
         <h2>Alguns trabalhos da Pavani Cortes</h2>
 
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="assets/corte1.png" alt="Corte masculino">
-            </div>
-
-            <div class="gallery-item">
-                <img src="assets/corte2.png" alt="Corte degradê">
-            </div>
-
-            <div class="gallery-item">
-                <img src="assets/corte3.jpg" alt="Barba alinhada">
-            </div>
-
-            <div class="gallery-item">
-                <img src="assets/corte4.jpg" alt="Corte finalizado">
-            </div>
-        </div>
+<div class="gallery-grid">
+    <div class="gallery-item">
+        <img src="assets/corte1.png" alt="Corte masculino com cabelo cacheado">
     </div>
+
+    <div class="gallery-item">
+        <img src="assets/corte2.png" alt="Corte masculino com degradê e desenho">
+    </div>
+
+    <div class="gallery-item">
+        <img src="assets/corte3.png" alt="Barba completa com contornos definidos">
+    </div>
+
+    <div class="gallery-item">
+        <img src="assets/corte4.png" alt="Cavanhaque e bigode bem definidos">
+    </div>
+</div>
+
+
 </section>
 
 <section class="booking" id="agendamento">
@@ -243,6 +244,12 @@
 </footer>
 
 <script>
+    console.log('Script carregado');
+
+console.log(
+    'Select encontrado:',
+    document.getElementById('serviceId')
+);
 
 fetch('http://localhost:8080/api/services')
         .then(response => {
